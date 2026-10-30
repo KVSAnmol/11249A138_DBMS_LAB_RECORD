@@ -1,0 +1,195 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Sep 7 10:16:14 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A138@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+STUDENT9                       TABLE
+STUDENT8                       TABLE
+STUDENT7                       TABLE
+STUDENT6                       TABLE
+STUDENT5                       TABLE
+STUDENT4                       TABLE
+STUDENT3                       TABLE
+STUDENT2                       TABLE
+STUDENT1                       TABLE
+STUDENT                        TABLE
+STU                            TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+EMPLOYEE                       TABLE
+DEPT                           TABLE
+DEPARTMENT                     TABLE
+DEPART                         TABLE
+
+15 rows selected.
+
+SQL> drop table student
+  2  ;
+
+Table dropped.
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+STUDENT9                       TABLE
+STUDENT8                       TABLE
+STUDENT7                       TABLE
+STUDENT6                       TABLE
+STUDENT5                       TABLE
+STUDENT4                       TABLE
+STUDENT3                       TABLE
+STUDENT2                       TABLE
+STUDENT1                       TABLE
+STU                            TABLE
+EMPLOYEE                       TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+DEPT                           TABLE
+DEPARTMENT                     TABLE
+DEPART                         TABLE
+BIN$QnyBZmPfThC6CqT/8RGtOA==$0 TABLE
+
+15 rows selected.
+
+SQL> create table student
+  2  (
+  3  student_id number(10) primary key,
+  4  student_name varchar(30),
+  5  department varchar(10),
+  6  marks number(3)
+  7  );
+
+Table created.
+
+SQL> insert into student values (102,'sita','ece',79);
+
+1 row created.
+
+SQL> insert into student values(103,'abhinav','cse',85);
+
+1 row created.
+
+SQL> insert into student values(104,'anmol','it',86);
+
+1 row created.
+
+SQL> insert into student values(105,'ramesh','ece',80);
+
+1 row created.
+
+SQL> insert into student values(106,'ravi','cse',75);
+
+1 row created.
+
+SQL> select count(*) as total_students from student;
+
+TOTAL_STUDENTS
+--------------
+             5
+
+SQL> select sum(marks) as total_marks from student;
+
+TOTAL_MARKS
+-----------
+        405
+
+SQL> select avg(marks) as average_marks from student;
+
+AVERAGE_MARKS
+-------------
+           81
+
+SQL> select max(marks) as highest_mark from student;
+
+HIGHEST_MARK
+------------
+          86
+
+SQL> select min(marks) as lowest_mark from student;
+
+LOWEST_MARK
+-----------
+         75
+
+SQL> select department, avg(marks) as avg_marks from student group by department;
+
+DEPARTMENT  AVG_MARKS
+---------- ----------
+cse                80
+it                 86
+ece              79.5
+
+SQL> select department, count(*) as total_student from student group by department;
+
+DEPARTMENT TOTAL_STUDENT
+---------- -------------
+cse                    2
+it                     1
+ece                    2
+
+SQL> select department , max(marks) as max_marks from student group by department;
+
+DEPARTMENT  MAX_MARKS
+---------- ----------
+cse                85
+it                 86
+ece                80
+
+SQL> select department,avg(marks) as avg_marks from student group by department having avg(marks)>80;
+
+DEPARTMENT  AVG_MARKS
+---------- ----------
+it                 86
+
+SQL> select department,avg(marks) as avg_marks from student group by department having avg(marks)>79;
+
+DEPARTMENT  AVG_MARKS
+---------- ----------
+cse                80
+it                 86
+ece              79.5
+
+SQL> select department, count(*) as total_students from student group by department having count(*)>1;
+
+DEPARTMENT TOTAL_STUDENTS
+---------- --------------
+cse                     2
+ece                     2
+
+SQL> select department, count(*) as no_of_students, avg(marks) as avg_marks, max(marks) as highest_marks from student group by department
+  2  ;
+
+DEPARTMENT NO_OF_STUDENTS  AVG_MARKS HIGHEST_MARKS
+---------- -------------- ---------- -------------
+cse                     2         80            85
+it                      1         86            86
+ece                     2       79.5            80
+
+SQL> select * from student;
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT      MARKS
+---------- ------------------------------ ---------- ----------
+       102 sita                           ece                79
+       103 abhinav                        cse                85
+       104 anmol                           it                 86
+       105 ramesh                         ece                80
+       106 ravi                           cse                75
+
+SQL> commit;
+
+Commit complete.
+
+SQL>

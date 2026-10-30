@@ -1,0 +1,261 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Aug 10 10:28:10 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A138@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+STUDENT9                       TABLE
+STUDENT8                       TABLE
+STUDENT7                       TABLE
+STUDENT6                       TABLE
+STUDENT4                       TABLE
+STUDENT2                       TABLE
+STUDENT1                       TABLE
+STUDENT                        TABLE
+STU                            TABLE
+EMPLOYEE                       TABLE
+DEPT                           TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+DEPARTMENT                     TABLE
+
+12 rows selected.
+
+SQL> create table student3
+  2  (
+  3  regno char(10),
+  4  name char(30),
+  5  DOB date,
+  6  course char(5),
+  7  dept char(5),
+  8  year number(2)
+  9  );
+
+Table created.
+
+SQL> desc student3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                              CHAR(10)
+ NAME                                               CHAR(30)
+ DOB                                                DATE
+ COURSE                                             CHAR(5)
+ DEPT                                               CHAR(5)
+ YEAR                                               NUMBER(2)
+
+SQL> alter table student3 add primary key(regno);
+
+Table altered.
+
+SQL> desc student3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                     NOT NULL CHAR(10)
+ NAME                                               CHAR(30)
+ DOB                                                DATE
+ COURSE                                             CHAR(5)
+ DEPT                                               CHAR(5)
+ YEAR                                               NUMBER(2)
+
+SQL> desc dept
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTNO                                    NOT NULL NUMBER(5)
+ DEPTNAME                                           CHAR(10)
+
+SQL> desc department
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTNAME                                  NOT NULL VARCHAR2(20)
+
+SQL> select * from Department;
+
+no rows selected
+
+SQL> insert into department  values('cse');
+
+1 row created.
+
+SQL> insert into department values('ece');
+
+1 row created.
+
+SQL> select * from department;
+
+DEPTNAME
+--------------------
+cse
+ece
+SQL> create table depart
+  2  (
+  3  deptno number(2),
+  4  deptname char(5)
+  5  );
+
+Table created.
+
+SQL> insert into depart values(1,'cse');
+
+1 row created.
+
+SQL> insert into depart values(2,'ece');
+
+1 row created.
+
+SQL> select * from depart;
+
+    DEPTNO DEPTN
+---------- -----
+         1 cse
+         2 ece
+
+SQL> alter table student3 add foreign key(course) references depart(deptname);
+alter table student3 add foreign key(course) references depart(deptname)
+                                                               *
+ERROR at line 1:
+ORA-02270: no matching unique or primary key for this column-list
+
+
+SQL> alter table depart add primary key(deptname);
+
+Table altered.
+
+SQL> alter table student3 add foreign key(course) references depart(deptname);
+
+Table altered.
+
+SQL> desc student3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                     NOT NULL CHAR(10)
+ NAME                                               CHAR(30)
+ DOB                                                DATE
+ COURSE                                             CHAR(5)
+ DEPT                                               CHAR(5)
+ YEAR                                               NUMBER(2)
+
+SQL> desc student
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                              CHAR(10)
+ NAME                                               CHAR(30)
+ DOB                                                DATE
+ COURSE                                             CHAR(10)
+ DEPTNO                                             CHAR(10)
+ YEAR                                               NUMBER(2)
+
+SQL> select * from student;
+
+REGNO      NAME                           DOB       COURSE     DEPTNO
+---------- ------------------------------ --------- ---------- ----------
+      YEAR
+----------
+11249A138  anmol                       11-FEB-07 BE         CSE
+         3
+
+11249A171  veda
+
+
+1          abhi                       10-MAR-07 be         csa
+         2
+
+
+REGNO      NAME                           DOB       COURSE     DEPTNO
+---------- ------------------------------ --------- ---------- ----------
+      YEAR
+----------
+2          venu                           25-AUG-08 be         cse
+         1
+
+SQL> create table student5
+  2  (
+  3  regno char(10),
+  4  name char(30),
+  5  dob date,
+  6  age number(3)
+  7  );
+
+Table created.
+
+SQL> insert into student5 values('&regno','&name','&dob','&age');
+Enter value for regno: 11249A138
+Enter value for name: anmol
+Enter value for dob: 11-feb-07
+Enter value for age: 19
+old   1: insert into student5 values('&regno','&name','&dob','&age')
+new   1: insert into student5 values('11249A138','anmol','11-feb-07','19')
+
+1 row created.
+
+SQL> /
+Enter value for regno: 11249A174
+Enter value for name: abhi
+Enter value for dob: 10-jan-06
+Enter value for age: 20
+old   1: insert into student5 values('&regno','&name','&dob','&age')
+new   1: insert into student5 values('11249A174','abhi','10-mar-06','20')
+
+1 row created.
+
+SQL> /
+Enter value for regno: 11249A175
+Enter value for name: veda
+Enter value for dob: 25-aug-08
+Enter value for age: 18
+old   1: insert into student5 values('&regno','&name','&dob','&age')
+new   1: insert into student5 values('11249A175','veda','25-aug-08','18')
+
+1 row created.
+
+SQL> select * from student5;
+
+REGNO      NAME                           DOB              AGE
+---------- ------------------------------ --------- ----------
+11249A138  anmol                          11-FEB-07         19
+11249A174  abhi                           10-JAN-06         20
+11249A175  veda                           25-AUG-08         18
+
+SQL> alter table student5 add check(age>15 and age<22);
+
+Table altered.
+SQL> alter table student5 add unique(name);
+
+Table altered.
+
+SQL> desc student3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                     NOT NULL CHAR(10)
+ NAME                                               CHAR(30)
+ DOB                                                DATE
+ COURSE                                             CHAR(5)
+ DEPT                                               CHAR(5)
+ YEAR                                               NUMBER(2)
+
+SQL> alter table student3 modify year not null;
+
+Table altered.
+
+SQL> desc student3
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                     NOT NULL CHAR(10)
+ NAME                                               CHAR(30)
+ DOB                                                DATE
+ COURSE                                             CHAR(5)
+ DEPT                                               CHAR(5)
+ YEAR                                      NOT NULL NUMBER(2)
+
+SQL> alter table student3 modify year default 1;
+
+Table altered.

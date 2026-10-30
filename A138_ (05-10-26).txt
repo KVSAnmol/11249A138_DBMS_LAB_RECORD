@@ -1,0 +1,163 @@
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Oct 5 10:30:56 2026
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: A138@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+
+SQL> create table std
+  2  (
+  3  student_id number(10) primary key,
+  4  student_name varchar2(30),
+  5  department varchar2(20),
+  6  marks number(3)
+  7  );
+
+Table created.
+
+SQL> insert into std values (101,'arun','cse',85);
+
+1 row created.
+
+SQL> insert into std values (102,'bala','ece',78);
+
+1 row created.
+
+SQL> insert into std values (103,'divya','it',92);
+
+1 row created.
+
+SQL> insert into std values (104,'kavi','cse',88);
+
+1 row created.
+
+SQL> select * from std;
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+       101 arun                           cse                          85
+       102 bala                           ece                          78
+       103 divya                          it                           92
+       104 kavi                           cse                          88
+
+SQL> create table alumni
+  2  (
+  3  student_name varchar2(30)
+  4  );
+
+Table created.
+
+SQL> insert into alumni values('arun');
+
+1 row created.
+
+SQL> insert into alumni values('ravi');
+
+1 row created.
+
+SQL> insert into alumni values ('kavi');
+
+1 row created.
+
+SQL> select * from alumni;
+
+STUDENT_NAME
+------------------------------
+arun
+ravi
+kavi
+
+SQL> select * from std where department in('cse','it');
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+       101 arun                           cse                          85
+       103 divya                          it                           92
+       104 kavi                           cse                          88
+
+SQL> select * from std where marks>any
+  2  (
+  3  select marks from std where department='ece'
+  4  );
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+       103 divya                          it                           92
+       104 kavi                           cse                          88
+       101 arun                           cse                          85
+
+SQL> select * from std where marks>all
+  2  (
+  3  select marks from std where department='ece'
+  4  );
+
+STUDENT_ID STUDENT_NAME                   DEPARTMENT                MARKS
+---------- ------------------------------ -------------------- ----------
+       101 arun                           cse                          85
+       104 kavi                           cse                          88
+       103 divya                          it                           92
+
+
+SQL> select student_name from std s where exists
+  2  (
+  3  select * from alumni a where a.student_name = s.student_name
+  4  );
+
+STUDENT_NAME
+------------------------------
+arun
+kavi
+
+SQL> select student_name from std s where not exists
+  2  (
+  3  select * from alumni a where a.student_name=s.student_name
+  4  );
+
+STUDENT_NAME
+------------------------------
+bala
+divya
+
+SQL> select student_name from std
+  2  union
+  3  select student_name from alumni;
+
+STUDENT_NAME
+------------------------------
+arun
+bala
+divya
+kavi
+ravi
+
+SQL> select student_name from std
+  2  intersect
+  3  select student_name from alumni;
+
+STUDENT_NAME
+------------------------------
+arun
+kavi
+
+///Check Constraints///
+
+SQL> insert into std values(101,'suresh','eee',80);
+insert into std values(101,'suresh','eee',80)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (A173.SYS_C0034812) violated
+
+
+SQL> insert into std values(null,'manoj','cse',75);
+insert into std values(null,'manoj','cse',75)
+                       *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("A173"."STD"."STUDENT_ID")
+
+
+
+SQL>
